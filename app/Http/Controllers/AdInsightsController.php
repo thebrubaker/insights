@@ -27,11 +27,13 @@ class AdInsightsController extends Controller
             $ad->object_id = $id;
             $facebook = new FacebookRequest;
             try {
-                $response = $facebook->get()->ad($ad->object_id)->insights();
+                $json = $facebook->get()->ad($ad->object_id)->insights();
+                $weekly = $facebook->get()->ad($ad->object_id)->insights(['date_preset' => 'last_7_days']);
             } catch (Exception $e) {
                 return "Error retrieving ad insights from Facebook";
             }
-            $ad->json = $response;
+            $ad->json = $json;
+            $ad->weekly = $weekly;
             $ad->save();
         }
 
@@ -54,11 +56,13 @@ class AdInsightsController extends Controller
             $ad->object_id = $id;
             $facebook = new FacebookRequest;
             try {
-                $response = $facebook->get()->ad($ad->object_id)->insights(['date_preset' => 'last_7_days']);
+                $json = $facebook->get()->ad($ad->object_id)->insights();
+                $weekly = $facebook->get()->ad($ad->object_id)->insights(['date_preset' => 'last_7_days']);
             } catch (Exception $e) {
                 return "Error retrieving ad insights from Facebook";
             }
-            $ad->weekly = $response;
+            $ad->json = $json;
+            $ad->weekly = $weekly;
             $ad->save();
         }
 

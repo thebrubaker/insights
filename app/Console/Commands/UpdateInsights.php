@@ -46,6 +46,7 @@ class UpdateInsights extends Command
             $ad->json = $json;
             $ad->weekly = $weekly;
             $ad->save();
+            $this->comment('Ad ' . $ad->object_id . ' has been updated.');
         }
         $this->comment('All ads have been updated.');
     }
