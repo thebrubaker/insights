@@ -18,6 +18,8 @@ abstract class Graph {
 
 	private $client;
 
+	private $parameters;
+
 	function __construct() {
 		$this->token = env('FACEBOOK_APP_TOKEN');
 	}
@@ -33,14 +35,25 @@ abstract class Graph {
 		$this->requestUrl .= $objectID;
 	}
 
-	public function insights() {
+	public function insights($parameters = null) {
 		$this->requestUrl .= '/insights';
+		$this->setParameters($parameters);
 		return $this->execute();
 	}
 
 	public function execute() {
-		$response = $this->client->get($this->requestUrl, ['query' => ['access_token' => $this->token]]);
+		$response = $this->client->get($this->requestUrl, ['query' => $this->parameters]);
 		return $response->getBody();
+	}
+
+	public function setParameters($array) {
+		$this->parameters = [];
+		if(isset($array)) {
+			foreach($array as $key => $value) {
+				$this->parameters[$key] = $value;
+			}
+		}
+		$this->parameters['access_token'] = $this->token;
 	}
 
 }

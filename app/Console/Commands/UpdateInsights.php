@@ -41,8 +41,10 @@ class UpdateInsights extends Command
     {
         $ads = AdInsights::all();
         foreach ($ads as $ad) {
-            $response = $facebook->get()->ad($ad->object_id)->insights();
-            $ad->json = $response;
+            $json = $facebook->get()->ad($ad->object_id)->insights();
+            $weekly = $facebook->get()->ad($ad->object_id)->insights(['date_preset' => 'last_7_days']);
+            $ad->json = $json;
+            $ad->weekly = $weekly;
             $ad->save();
         }
         $this->comment('All ads have been updated.');

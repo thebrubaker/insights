@@ -19,13 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('insights', 'AdInsightsController');
+Route::get('insights/{id}', 'AdInsightsController@show');
+Route::get('weekly/{id}', 'AdInsightsController@weekly');
 
 Route::get('test', function() {
 	$facebook = new FacebookRequest;
-	$response = $facebook->get()->campaign('6027536110929')->execute();
-	$json = json_decode($response);
-	dd($json);
+	$response = $facebook->get()->campaign('6027536110929')->insights(['date_preset' => 'last_7_days']);
+	echo $response;
 });
 
 Route::get('token', function() {
